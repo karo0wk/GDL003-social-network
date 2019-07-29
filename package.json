@@ -1,0 +1,25 @@
+{
+  "name": "network",
+  "version": "1.0.0",
+  "description": "nose",
+  "main": "main.js",
+  "scripts": {
+    "test": "t"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karo0wk/GDL003-social-network.git"
+  },
+  "keywords": [
+    "contraseña"
+  ],
+  "author": "caro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karo0wk/GDL003-social-network/issues"
+  },
+  "homepage": "https://github.com/karo0wk/GDL003-social-network#readme",
+  "dependencies": {
+    "firebase": "^6.3.3"
+  }
+}
