@@ -1,3 +1,5 @@
+
+
 /*const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -70,16 +72,22 @@ function initFirebaseAuth() {
   }
 */
 
-const coment = document.querySelector("#textoCom");
-const botPublicar = document.querySelector("#btnRegistroPost")
-const divPost = document.querySelector("#publicar")
+
+const botPublicar = document.querySelector("#btnRegistroPost");
+const divPost = document.querySelector("#publicar");
+
+const baicaList = document.querySelector("#baica-list");
+
+
+const form = document.querySelector("#formCom");
 
 
 
-let db = firebase.firestore(app)
-
+let db = firebase.firestore()
+// db.settings({ timestampsInSnapshots: true});
+/*
 // Add a new document in collection "cities"
-db.collection("post").doc("prueba").set(
+db.collection("post").doc("checar").set(
   {consejos:"consejos", 
   compra:"compra", 
   venta:"venta", 
@@ -92,21 +100,72 @@ db.collection("post").doc("prueba").set(
   console.error("Error writing document: ", error);
 });
 
+
 // [START get_all_users]
-db.collection("post").get().then((querySnapshot) => {
-  querySnapshot.forEach((doc) => {
+db.collection("post").get().then((snapshot) => {
+  snapshot.docs.forEach((doc) => {
       console.log(`${doc.id} => ${doc.data()}`);
   });
 });
+*/
+
+
+//otro get
+/*db.collection("cities").get().then((snapshot) =>{
+  snapshot.docs.forEach(doc => {
+    caray(doc);
+  })
+});*/
 // [END get_all_users]
+
+// [STARD  create element and render cafe]
+function renderBaica(doc){
+  let li = document.createElement("li")
+  let autor = document.createElement("span");
+  let comentario = document.createElement("span");
+
+  li.setAttribute("data-id", doc.id)
+  autor.textContent = doc.data().autor;
+  comentario.textContent = doc.data().comentario;
+
+
+  li.appendChild(autor);
+  li.appendChild(comentario);
+
+  baicaList.appendChild(li);
+}
+
+
+db.collection("comentarios").get().then((snapshot) => {
+  snapshot.docs.forEach(doc => {
+    renderBaica(doc);
+  })
+});
+
+//[END create element and render cafe]
 
 // [STARD saving data]
 /*
-botPublicar.addEventListener("submit",(e)){
-  e.preventDefauld();
+coment.addEventListener("submit",(e) => {
+  e.preventDefault();
   db.collection("post").add({
-    coment: form.name
-  })
-}
+    comenta: coment.TextComen.value,<ul  ></ul>
+
+  });
+  coment.comenta.value = "";
+  
+})
 */
+//oyher
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  db.collection("comentarios").add({
+    autor: form.autor.value,
+    comentario: form.comentario.value
+  });
+  form.autor.value= "";
+  form.comentario.value= "";
+
+})
 
