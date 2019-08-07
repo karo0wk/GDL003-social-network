@@ -75,14 +75,8 @@ function initFirebaseAuth() {
 
 const botPublicar = document.querySelector("#btnRegistroPost");
 const divPost = document.querySelector("#publicar");
-
 const baicaList = document.querySelector("#baica-list");
-
-
 const form = document.querySelector("#formCom");
-
-
-
 let db = firebase.firestore()
 // db.settings({ timestampsInSnapshots: true});
 /*
@@ -123,25 +117,39 @@ function renderBaica(doc){
   let li = document.createElement("li")
   let autor = document.createElement("span");
   let comentario = document.createElement("span");
+  let cross = document.createElement('div');
 
   li.setAttribute("data-id", doc.id)
   autor.textContent = doc.data().autor;
   comentario.textContent = doc.data().comentario;
+  cross.textContent = 'x';
 
 
   li.appendChild(autor);
   li.appendChild(comentario);
+  li.appendChild(cross);
 
   baicaList.appendChild(li);
+
+// [STARD] deleting data
+cross.addEventListener('click', (e) => {
+  e.stopPropagation();
+  let id = e.target.parentElement.getAttribute('data-id');
+  db.collection('comentarios').doc(id).delete();
+});
 }
 
 
+
+
+//[STARD] Geting data
+/*
 db.collection("comentarios").get().then((snapshot) => {
   snapshot.docs.forEach(doc => {
     renderBaica(doc);
   })
 });
-
+*/
 //[END create element and render cafe]
 
 // [STARD saving data]
@@ -167,5 +175,19 @@ form.addEventListener("submit", (e) => {
   form.autor.value= "";
   form.comentario.value= "";
 
-})
+});
+
+//[SATRD] realtime listener
+db.collection('comentarios').orderBy('autor').onSnapshot(snapshot => {
+  let changes = snapshot.docChanges();
+  changes.forEach(change => {
+      console.log(change.doc.data());
+      if(change.type == 'added'){
+          renderBaica(change.doc);
+      } else if (change.type == 'removed'){
+          let li = baicaList.querySelector('[data-id=' + change.doc.id + ']');
+          baicaList.removeChild(li);
+      }
+  });
+});
 
