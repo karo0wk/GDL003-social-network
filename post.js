@@ -94,7 +94,7 @@ db.collection("post").doc("checar").set(
   console.error("Error writing document: ", error);
 });
 
-
+let db = firebase.firestore()
 // [START get_all_users]
 db.collection("post").get().then((snapshot) => {
   snapshot.docs.forEach((doc) => {
